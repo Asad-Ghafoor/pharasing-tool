@@ -1,0 +1,15 @@
+.sidebar-parent-btn:hover img {
+  filter: invert(1) brightness(2);
+}
+
+.sidebar-parent-btn:hover .list-item-label {
+  color: #252526;
+}
+
+.appbar-menu-parent:hover img {
+  filter: unset;
+}
+
+.appbar-menu-parent:hover .list-item-label {
+  color: #ffffff;
+}
