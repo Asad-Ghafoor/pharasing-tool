@@ -1,3 +1,5 @@
+// File: src/components/layouts/admin/pages/AdminLayout.js
+
 import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
@@ -14,11 +16,12 @@ import AttachmentIcon from "@mui/icons-material/Attachment";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-//components
+// components
 import AdminSidebar from "../components/AdminSidebar";
 import AdminHeader from "../components/AdminHeader";
-//hooks
+// hooks
 import useWindowResize from "../../../../hooks/useWindowResize";
+
 export const drawerWidth = 190;
 export const HistryDrawerWidth = 190;
 
@@ -110,7 +113,6 @@ function AdminLayout({ children, navLinks, user }) {
           >
             <Box
               sx={{
-                // background: 'red',
                 height: isSmallScreen ? '50vh' : '70vh',
                 width: isSmallScreen ? '80vw' : '100vw',
                 borderRadius: '15px',

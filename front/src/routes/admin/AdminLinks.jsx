@@ -7,24 +7,19 @@ import SmsIcon from '@mui/icons-material/Sms';
 
 //  Lazy Imports
 const Dashboard = lazy(() => import("../../modules/admin/dashboard/pages/Dashboard"));
-const SentOfferLog = lazy(() => import("../../modules/admin/sentOfferLog/pages/SentOfferLog"));
-const Email = lazy(() => import("../../modules/admin/email/page/Email"));
-const SMS = lazy(() => import("../../modules/admin/sms/page/SMS"));
-const Profile = lazy(() => import("../../modules/admin/profile/pages/Profile"));
 
 
 export const AdminRoutes = [
-  <Route path="dashboard" element={<Dashboard />} />,
-  <Route path="sent-offer" element={<SentOfferLog />} />,
-  <Route path="email" element={<Email />} />,
-  <Route path="sms" element={<SMS />} />,
-  <Route path="profile" element={<Profile />} />,
+  <Route path="test1" element={<Dashboard />} />,
+  <Route path="test2" element={<Dashboard />} />,
+  <Route path="test3" element={<Dashboard />} />,
+  <Route path="test4" element={<Dashboard />} />,
   <Route path="/*" element={<Navigate replace to="/admin/dashboard" />} />,
 ];
 
 export const AdminLinks = [
-  { icon: GridViewIcon, link: "/dashboard" },
-  { icon: SendIcon, link: "/sent-offer" },
-  { icon: EmailIcon, link: "/email" },
-  { icon: SmsIcon, link: "/sms" }
+  { icon: GridViewIcon, link: "/test1", title: "Test1" },
+  { icon: SendIcon, link: "/test2", title: "Test2" },
+  { icon: EmailIcon, link: "/test3", title: "Test2" },
+  { icon: SmsIcon, link: "/test4", title: "test4" }
 ];

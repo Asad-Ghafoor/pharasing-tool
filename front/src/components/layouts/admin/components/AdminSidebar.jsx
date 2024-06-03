@@ -17,6 +17,7 @@ import { Logo } from "../../../../assets/image/index";
 import Divider from "@mui/material/Divider";
 import { useDispatch } from 'react-redux';
 import { setUpload } from "../../../../features/authSlice";
+import { Checkbox } from "@mui/material";
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -63,6 +64,7 @@ function AdminSidebar({ open, navLinks }) {
     if (pathname.includes(`/admin${tab}`)) {
       return true;
     }
+    return false;
   };
 
   return (
@@ -100,17 +102,6 @@ function AdminSidebar({ open, navLinks }) {
             }}
             onClick={() => navigate("/")}
           />
-          {/* <Typography
-            component={"h2"}
-            variant="h2"
-            sx={{
-              fontSize: "14px",
-              fontWeight: "700",
-              color: "white",
-            }}
-          >
-            Realtor Dashboard
-          </Typography> */}
         </Box>
         <Divider
           sx={{ width: "100%", backgroundColor: "white", mt: 1, mb: 1 }}
@@ -137,14 +128,7 @@ function AdminSidebar({ open, navLinks }) {
                   sx={{
                     mx: open ?? 2,
                     mb: 1,
-                    backgroundColor: getTabActive(tab.link) && "#fff",
-                    borderRadius: "10px",
-                    "&:hover": {
-                      backgroundColor: "#fff",
-                    },
-                    "&:hover .sidebarIcon": {
-                      color: "black",
-                    },
+                    borderRadius: "10px"
                   }}
                   key={i}
                   onClick={() => {
@@ -159,34 +143,20 @@ function AdminSidebar({ open, navLinks }) {
                       minWidth: "max-content",
                     }}
                   >
-                    {typeof tab.icon === "string" ? (
-                      <Box
-                        component={"img"}
-                        src={tab.icon}
-                        sx={{
-                          width: "24px",
-                          height: "24px",
-                          filter:
-                            getTabActive(tab.link) && "invert(1) brightness(1)",
-                        }}
-                        alt={"icon"}
-                      />
-                    ) : (
-                      <tab.icon
-                        className="sidebarIcon"
-                        sx={{
-                          color: getTabActive(tab.link) ? "black" : "white",
-                        }}
-                      />
-                    )}
+                    <Checkbox
+                      sx={{
+                        width: "24px",
+                        height: "24px",
+                        color: "black",
+                      }}
+                    />
                   </ListItemIcon>
                   <ListItemText>
                     <Box
                       component="span"
-                      className="list-item-label"
                       sx={{
-                        color: getTabActive(tab.link) ? "#252526" : "#fff",
-                        fontWeight: getTabActive(tab.link) && 600,
+                        color: "#fff",
+                        fontWeight: 600,
                       }}
                     >
                       {tab.title}
