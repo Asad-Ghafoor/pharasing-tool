@@ -188,7 +188,7 @@ const employeesManagement = () => {
         <>
           <Button
             sx={{
-              background: data.STATUS === "active" ? "#3b1d6f" : "#cbd5e0",
+              background: data.STATUS === "active" ? "#3b90b2" : "#cbd5e0",
               borderRadius: "4px",
               minHeight: '12px',
               fontSize: "12px", fontWeight: 400,

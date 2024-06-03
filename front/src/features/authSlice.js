@@ -5,7 +5,9 @@ export const authSlice = createSlice({
   initialState: {
     isLoading: false,
     user: null,
-    refetch: false
+    refetch: false,
+    state: true,
+    upload: true
   },
   reducers: {
     setLoading: (state, action) => {
@@ -18,11 +20,15 @@ export const authSlice = createSlice({
     setRefetch: (state, action) => {
       state.refetch = action.payload;
     },
+    setUpload: (state, action) => {
+      state.upload = action.payload;
+    }
+
   },
 });
 
 const { actions, reducer } = authSlice;
 
-export const { setLoading, setUser, setRefetch } = actions;
+export const { setLoading, setUser, setRefetch, setUpload } = actions;
 
 export default reducer;

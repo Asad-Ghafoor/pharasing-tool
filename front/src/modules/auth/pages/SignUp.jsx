@@ -17,12 +17,9 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 //APIs
 import { AuthAPI } from "../../../axios";
-//redux actions
-import { setLoading, setUser } from "../../../features/authSlice";
 
 const SignUp = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const [passVisible, setPassVisible] = useState(false);
     const [InProgress, setInProgress] = useState(false);
@@ -42,25 +39,19 @@ const SignUp = () => {
     // Handle form submission
     const onSubmit = (values) => {
         setInProgress(true);
-        dispatch(setLoading(true));
         AuthAPI.login(JSON.stringify(values))
             .then((res) => {
                 setInProgress(false);
-                dispatch(setLoading(false));
                 if (res.code == 200) {
-                    localStorage.setItem("accessToken", res.data.token);
-                    dispatch(setUser(res.data));
-                    dispatch(setLoading(false));
+
                     setInProgress(false);
                 } else {
                     setInProgress(false);
-                    dispatch(setLoading(false));
                 }
             })
             .catch((err) => {
                 console.log(err);
                 setInProgress(false);
-                dispatch(setLoading(false));
             });
     };
     const formik = useFormik({ initialValues, validationSchema, onSubmit });
@@ -127,13 +118,28 @@ const SignUp = () => {
                                     fontSize: "14px",
                                 }}
                             >
-                                Enter your email and password to sign in
+                                Enter your details to create your account
                             </Typography>
                         </Box>
                         <form
                             style={{ width: "100% !important" }}
                             onSubmit={formik.handleSubmit}
                         >
+                            {/* ======= User Name Input ======= */}
+                            <Box sx={{ paddingBottom: "1rem" }}>
+                                <InputField
+                                    label="User Name"
+                                    placeholder="your user Name"
+                                    name="userName"
+                                    value={formik.values.userName}
+                                    onChange={formik.handleChange}
+                                    error={
+                                        formik.touched.userName &&
+                                        formik.errors.userName &&
+                                        formik.errors.userName
+                                    }
+                                />
+                            </Box>
                             {/* ======= Email Input ======= */}
                             <Box sx={{ paddingBottom: "1rem" }}>
                                 <InputField
@@ -197,10 +203,10 @@ const SignUp = () => {
                                         },
                                     }}
                                 >
-                                    {"don't have an account?"}
+                                    {"already have an account ?"}
                                 </Typography>
                                 <Typography
-                                    onClick={() => navigate("/auth/forget-password")}
+                                    onClick={() => navigate("/auth/login")}
                                     sx={{
                                         color: 'primary.main',
                                         fontSize: '15px',
@@ -211,7 +217,7 @@ const SignUp = () => {
                                         },
                                     }}
                                 >
-                                    SignUp
+                                    Login
                                 </Typography>
                             </Box>
                             {/* ======= Submit Button ======= */}
@@ -225,7 +231,7 @@ const SignUp = () => {
                                 {InProgress ? (
                                     <CircularProgress size={30} sx={{ color: "white" }} />
                                 ) : (
-                                    "SIGN IN"
+                                    "Sign UP"
                                 )}
                             </Button>
                         </form>

@@ -19,7 +19,7 @@ import { useFormik } from "formik";
 //APIs
 import { AuthAPI } from "../../../axios";
 //redux actions
-import { setLoading, setUser } from "../../../features/authSlice";
+import { setUser , setLoading } from "../../../features/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -202,7 +202,7 @@ const Login = () => {
                   {"don't have an account?"}
                 </Typography>
                 <Typography
-                  onClick={() => navigate("/auth/forget-password")}
+                  onClick={() => navigate("/auth/sign-up")}
                   sx={{
                     color: 'primary.main',
                     fontSize: '15px',

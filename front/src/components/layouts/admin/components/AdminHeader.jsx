@@ -33,7 +33,7 @@ const AppBar = styled(MuiAppBar, {
   zIndex: theme.zIndex.drawer + 1,
   boxShadow: "none",
   borderLeft: "1px solid #e4e4e8",
-  backgroundColor: "#3b1d6f",
+  backgroundColor: "#3b90b2",
   boxShadow: "0px 0px 8px 0px black",
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,

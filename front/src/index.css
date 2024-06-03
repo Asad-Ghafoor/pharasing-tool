@@ -41,7 +41,7 @@ span {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #3b1d6f;
+  background: #3b90b2;
   border-radius: 3px;
 }
 
@@ -54,7 +54,7 @@ span {
 
 .chip-blue {
   background: #eff6ff !important;
-  color: #3b1d6f !important;
+  color: #3b90b2 !important;
 }
 
 .chip-danger {

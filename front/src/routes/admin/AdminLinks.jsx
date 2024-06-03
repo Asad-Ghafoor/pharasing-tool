@@ -10,6 +10,7 @@ const Dashboard = lazy(() => import("../../modules/admin/dashboard/pages/Dashboa
 const SentOfferLog = lazy(() => import("../../modules/admin/sentOfferLog/pages/SentOfferLog"));
 const Email = lazy(() => import("../../modules/admin/email/page/Email"));
 const SMS = lazy(() => import("../../modules/admin/sms/page/SMS"));
+const Profile = lazy(() => import("../../modules/admin/profile/pages/Profile"));
 
 
 export const AdminRoutes = [
@@ -17,6 +18,7 @@ export const AdminRoutes = [
   <Route path="sent-offer" element={<SentOfferLog />} />,
   <Route path="email" element={<Email />} />,
   <Route path="sms" element={<SMS />} />,
+  <Route path="profile" element={<Profile />} />,
   <Route path="/*" element={<Navigate replace to="/admin/dashboard" />} />,
 ];
 

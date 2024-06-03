@@ -8,6 +8,7 @@ import AuthLayout from "../modules/auth/Layout";
 import AdminRouter from "./admin/adminRouter";
 //components
 const Login = lazy(() => import("../modules/auth/pages/Login"));
+const SignUP = lazy(() => import("../modules/auth/pages/SignUp"));
 
 function Root({ checked }) {
   const { user } = useSelector(({ auth }) => auth);
@@ -30,6 +31,7 @@ function Root({ checked }) {
                     element={<Navigate replace to="/auth/login" />}
                   />
                   <Route path="login" element={<Login />} />
+                  <Route path="sign-up" element={<SignUP />} />
                 </Route>
                 <Route path="/*" element={<Navigate replace to="/auth" />} />
               </Routes>

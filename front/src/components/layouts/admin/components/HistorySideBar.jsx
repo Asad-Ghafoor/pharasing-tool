@@ -12,11 +12,8 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/style.css";
-import { drawerWidth } from "../pages/AdminLayout";
+import { HistryDrawerWidth } from "../pages/AdminLayout";
 import { Logo } from "../../../../assets/image/index";
-import Divider from "@mui/material/Divider";
-import { useDispatch } from 'react-redux';
-import { setUpload } from "../../../../features/authSlice";
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -25,7 +22,7 @@ const Drawer = styled(MuiDrawer, {
     position: "relative",
     whiteSpace: "nowrap",
     boxShadow: "0px 0px 8px 0px black",
-    width: drawerWidth,
+    width: HistryDrawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -47,15 +44,13 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-function AdminSidebar({ open, navLinks }) {
+function HistorySideBar({ open, navLinks }) {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
   const { pathname } = useLocation();
 
   const [openChild, setOpenChild] = React.useState(false);
 
   const handleNavigate = (path) => {
-    dispatch(setUpload(true));
     if (path) navigate(`/admin${path}`);
   };
 
@@ -112,10 +107,7 @@ function AdminSidebar({ open, navLinks }) {
             Realtor Dashboard
           </Typography> */}
         </Box>
-        <Divider
-          sx={{ width: "100%", backgroundColor: "white", mt: 1, mb: 1 }}
-          variant="middle"
-        />
+       
       </Toolbar>
       <List
         component="nav"
@@ -202,4 +194,4 @@ function AdminSidebar({ open, navLinks }) {
   );
 }
 
-export default AdminSidebar;
+export default HistorySideBar;

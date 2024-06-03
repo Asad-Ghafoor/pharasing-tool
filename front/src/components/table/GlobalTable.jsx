@@ -187,7 +187,7 @@ const GlobalTable = ({
         columns={tableColumns}
         pagination={{ position: ["bottomCenter"] }}
         // loading={loading}
-        loading={{ spinning: loading, indicator: <CircularProgress size={"40px"} style={{ color: "#3b1d6f" }} /> }}
+        loading={{ spinning: loading, indicator: <CircularProgress size={"40px"} style={{ color: "#3b90b2" }} /> }}
         rowClassName={rowClassName}
         scroll={{x:true}}
       />
