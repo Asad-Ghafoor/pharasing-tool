@@ -139,7 +139,7 @@ const webTheme = createTheme({
         root: {
           color: "#252526",
           "&.Mui-checked": {
-            color: "#3b90b2",
+            color: "white",
           },
         },
       },
@@ -148,7 +148,7 @@ const webTheme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-checked": {
-            color: "#3b90b2",
+            color: "white",
           },
         },
       },

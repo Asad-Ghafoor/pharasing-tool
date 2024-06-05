@@ -57,11 +57,11 @@ function AdminSidebar({ open, navLinks }) {
 
   const handleNavigate = (path) => {
     dispatch(setUpload(true));
-    if (path) navigate(`/admin${path}`);
+    if (path) navigate(`/user${path}`);
   };
 
   const getTabActive = (tab) => {
-    if (pathname.includes(`/admin${tab}`)) {
+    if (pathname.includes(`/user${tab}`)) {
       return true;
     }
     return false;

@@ -25,7 +25,7 @@ const SignUp = () => {
     const [InProgress, setInProgress] = useState(false);
 
     // initial values
-    const initialValues = { email: "", password: "" };
+    const initialValues = { email: "", password: "" , userName: "",role :"user" };
 
     // validation schema
     const validationSchema = yup.object().shape({
@@ -34,16 +34,17 @@ const SignUp = () => {
             .email("Invalid email address")
             .required("Email is required"),
         password: yup.string().required("Password is required"),
+        userName: yup.string().required("User Name is required"),
     });
 
     // Handle form submission
     const onSubmit = (values) => {
         setInProgress(true);
-        AuthAPI.login(JSON.stringify(values))
+        AuthAPI.register(JSON.stringify(values))
             .then((res) => {
                 setInProgress(false);
                 if (res.code == 200) {
-
+                   navigate('auth/login')
                     setInProgress(false);
                 } else {
                     setInProgress(false);

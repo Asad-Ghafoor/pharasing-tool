@@ -6,11 +6,17 @@ import {
   Box,
   Grid,
   Button,
-  CircularProgress
+  CircularProgress,
+  FormControlLabel,
+  Checkbox,
+  Switch,
 } from "@mui/material";
 import { VisibilityOutlined, VisibilityOffOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+//assets
+import { AuthLoginBG } from "../../../assets/image";
 //components
 import InputField from "../../../components/InputField/InputField";
 //formik and validations
@@ -19,24 +25,24 @@ import { useFormik } from "formik";
 //APIs
 import { AuthAPI } from "../../../axios";
 //redux actions
-import { setUser , setLoading } from "../../../features/authSlice";
+import { setLoading, setUser } from "../../../features/authSlice";
 
-const Login = () => {
+const SetPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [passVisible, setPassVisible] = useState(false);
+  const [passCVisible, setPassCVisible] = useState(false);
   const [InProgress, setInProgress] = useState(false);
 
   // initial values
-  const initialValues = { email: "", password: "" };
+  const initialValues = { cPassword: "", password: "" };
 
   // validation schema
   const validationSchema = yup.object().shape({
-    email: yup
+    cPassword: yup
       .string()
-      .email("Invalid email address")
-      .required("Email is required"),
+      .required("Confirm is required"),
     password: yup.string().required("Password is required"),
   });
 
@@ -44,36 +50,27 @@ const Login = () => {
   const onSubmit = (values) => {
     setInProgress(true);
     dispatch(setLoading(true));
-    AuthAPI.login(JSON.stringify(values))
+    const _id = Cookies.get("userId")
+    AuthAPI.resetPassword(JSON.stringify({...values, _id}))
       .then((res) => {
         setInProgress(false);
-        dispatch(setLoading(false));
-        if (res.code == 200) {
-          localStorage.setItem("accessToken", res.data.token);
-          dispatch(setUser(res.data));
-          dispatch(setLoading(false));
-          setInProgress(false);
-        } else {
-          setInProgress(false);
-          dispatch(setLoading(false));
-        }
+        navigate('/auth/login')
       })
       .catch((err) => {
         console.log(err);
         setInProgress(false);
-        dispatch(setLoading(false));
       });
   };
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
 
   return (
-    <Grid container sx={{ height: "100%", }}>
+    <Grid container sx={{ height: "100%" }}>
       <Grid
         item
         md={12}
         sm={12}
         xs={12}
-        sx={{ height: "100vh" }}
+        sx={{ height: "100%"}}
       >
         <Container
           maxWidth="sm"
@@ -106,12 +103,12 @@ const Login = () => {
                 component="h3"
                 variant="h3"
                 sx={{
-                  color: "#3b90b2",
+                  color: "#4fd1c5",
                   fontSize: "32px",
                   fontWeight: 600,
                 }}
               >
-                Welcome Back
+                Set New Password
               </Typography>
             </Box>
             <Box
@@ -129,30 +126,14 @@ const Login = () => {
                   fontSize: "14px",
                 }}
               >
-                Enter your email and password to sign in
+                Enter your email to reset the password
               </Typography>
             </Box>
             <form
               style={{ width: "100% !important" }}
               onSubmit={formik.handleSubmit}
             >
-              {/* ======= Email Input ======= */}
-              <Box sx={{ paddingBottom: "1rem" }}>
-                <InputField
-                  label="Email"
-                  placeholder="Your email address"
-                  type="email"
-                  name="email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.email &&
-                    formik.errors.email &&
-                    formik.errors.email
-                  }
-                />
-              </Box>
-              {/* ======= Password Input ======= */}
+              {/* ======= Passwprd Input ======= */}
               <Box sx={{ paddingBottom: "1rem" }}>
                 <InputField
                   label="Password"
@@ -186,49 +167,39 @@ const Login = () => {
                   }
                 />
               </Box>
-              {/* ======= Link ======= */}
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Typography
-                  component="p"
-                  sx={{
-                    color: 'black',
-                    fontSize: '12px',
-                    ":hover": {
-                      cursor: 'pointer',
-                      color: 'black',
-                    },
-                  }}
-                >
-                  {"don't have an account?"}
-                </Typography>
-                <Typography
-                  onClick={() => navigate("/auth/sign-up")}
-                  sx={{
-                    color: 'primary.main',
-                    fontSize: '12px',
-                    ml: 1,
-                    ":hover": {
-                      cursor: 'pointer',
-                      color: 'primary.main',
-                    },
-                  }}
-                >
-                  SignUp
-                </Typography>
-                <Typography
-                  onClick={() => navigate("/auth/forget-password")}
-                  sx={{
-                    color: 'primary.main',
-                    fontSize: '12px',
-                    ml: 3,
-                    ":hover": {
-                      cursor: 'pointer',
-                      color: 'primary.main',
-                    },
-                  }}
-                >
-                 forgot Password?
-                </Typography>
+              {/* ======= Confirm Password Input ======= */}
+              <Box sx={{ paddingBottom: "1rem" }}>
+                <InputField
+                  label="Confirm Password"
+                  name="cPassword"
+                  placeholder="Your password"
+                  type={passCVisible ? "text" : "Password"}
+                  value={formik.values.cPassword}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.cPassword &&
+                    formik.errors.cPassword &&
+                    formik.errors.cPassword
+                  }
+                  endAdornment={
+                    <InputAdornment
+                      position="end"
+                      sx={{ paddingRight: "0.5rem" }}
+                    >
+                      {passCVisible ? (
+                        <VisibilityOffOutlined
+                          onClick={() => setPassCVisible(false)}
+                          sx={{ color: "primary.grey", cursor: "pointer" }}
+                        />
+                      ) : (
+                        <VisibilityOutlined
+                          onClick={() => setPassCVisible(true)}
+                          sx={{ color: "primary.grey", cursor: "pointer" }}
+                        />
+                      )}
+                    </InputAdornment>
+                  }
+                />
               </Box>
               {/* ======= Submit Button ======= */}
               <Button
@@ -241,7 +212,7 @@ const Login = () => {
                 {InProgress ? (
                   <CircularProgress size={30} sx={{ color: "white" }} />
                 ) : (
-                  "SIGN IN"
+                  "UPDATE PASSWORD"
                 )}
               </Button>
             </form>
@@ -252,4 +223,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SetPassword;

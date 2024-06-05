@@ -83,7 +83,7 @@ export default function AdminMenu({
 
   const handleProfile = () => {
     dispatch(setUpload(false));
-    navigate("/admin/profile")
+    navigate("/user/profile")
     setAnchorEl(null)
   };
 

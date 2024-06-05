@@ -9,6 +9,13 @@ class Routes {
     return response.data;
   }
 
+  //register user
+  async register(data) {
+    const response = await axios.post(`/register`, data);
+    if (response && response.response?.data) return response.response.data;
+    return response.data;
+  }
+
   //  Get Profile
   async getUserProfile(_id) {
     const response = await axios.get("/auth/Profile", _id);
@@ -18,14 +25,14 @@ class Routes {
 
   //  forget password
   async forgotPassword(data) {
-    const response = await axios.post("/auth/forgotPassword", data);
+    const response = await axios.post("/forgot-password", data);
     if (response && response.response?.data) return response.response.data;
     return response.data;
   }
 
   //  reset password
   async resetPassword(data) {
-    const response = await axios.post(`/auth/resetPassword`, data);
+    const response = await axios.post(`/editUser`, data);
     console.log(response);
     if (response && response.response?.data) return response.response.data;
     return response.data;
@@ -34,7 +41,7 @@ class Routes {
   // verify Code 
 
   async verification_code(verification_code) {
-    const response = await axios.post("/auth/verify", verification_code);
+    const response = await axios.post("/verification", verification_code);
     if (response && response.response?.data) return response.response.data;
     return response.data;
   }

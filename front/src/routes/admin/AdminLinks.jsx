@@ -7,6 +7,7 @@ import SmsIcon from '@mui/icons-material/Sms';
 
 //  Lazy Imports
 const Dashboard = lazy(() => import("../../modules/admin/dashboard/pages/Dashboard"));
+const Profile = lazy(() => import("../../modules/admin/profile/pages/Profile"));
 
 
 export const AdminRoutes = [
@@ -14,7 +15,8 @@ export const AdminRoutes = [
   <Route path="test2" element={<Dashboard />} />,
   <Route path="test3" element={<Dashboard />} />,
   <Route path="test4" element={<Dashboard />} />,
-  <Route path="/*" element={<Navigate replace to="/admin/dashboard" />} />,
+  <Route path="profile" element={<Profile />} />,
+  <Route path="/*" element={<Navigate replace to="/user/dashboard" />} />,
 ];
 
 export const AdminLinks = [
