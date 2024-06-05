@@ -45,6 +45,12 @@ class Routes {
     if (response && response.response?.data) return response.response.data;
     return response.data;
   }
+
+  async updateUser(data) {
+    const response = await axios.post("/update_user", data);
+    if (response && response.response?.data) return response.response.data;
+    return response.data;
+  }
 }
 
 export default new Routes();

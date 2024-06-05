@@ -17,17 +17,22 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 //APIs
 import { AuthAPI } from "../../../../axios";
-import { useDispatch } from "react-redux";
-// import { setLoading, setUser } from "../../../features/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../../../features/authSlice";
 
 const Profile = () => {
     const navigate = useNavigate();
-    // const dispatch = useDispatch();
 
     const [passVisible, setPassVisible] = useState(false);
     const [InProgress, setInProgress] = useState(false);
+    const { user } = useSelector(({ auth }) => auth);
+    const dispatch = useDispatch();
 
-    const initialValues = { email: "", password: "", userName: "" };
+    const initialValues = {
+        email: user?.userObject?.email || "",
+        password: "",
+        userName: user?.userObject?.userName || ""
+    }
 
     // validation schema
     const validationSchema = yup.object().shape({
@@ -42,13 +47,12 @@ const Profile = () => {
     // Handle form submission
     const onSubmit = (values) => {
         setInProgress(true);
-        AuthAPI.login(JSON.stringify(values))
+        const _id = user?.userObject?.id
+        AuthAPI.updateUser(JSON.stringify({ ...values, _id }))
             .then((res) => {
                 setInProgress(false);
                 if (res.code === 200) {
-                    // Handle success
-                } else {
-                    // Handle failure
+                    dispatch(setUser(res.data));
                 }
             })
             .catch((err) => {

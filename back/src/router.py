@@ -78,7 +78,7 @@ def login():
         access_token = create_access_token(identity=str(user["_id"]))
         userObject = {
             "id": str(user["_id"]),
-            "name": user.get("name", ""),
+            "userName": user.get("userName", ""),
             "email": user["email"],
             "role": user.get("role", ""),
         }
@@ -323,3 +323,86 @@ def edit_user():
             "message": f"Internal Server Error: {str(error)}",
             "notify": True
         }), 500
+
+@app.route("/update_user", methods=["POST"])
+def update_user():
+    try:
+        data = request.json
+        if not data:
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "Bad Request: No data provided",
+                    "notify": True,
+                }
+            ), 400
+
+        if not ObjectId.is_valid(data["_id"]):
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "Bad Request: Invalid user ID",
+                    "notify": True,
+                }
+            ), 400
+
+        updated_data = {}
+        if "userName" in data:
+            updated_data["userName"] = data["userName"]
+        if "email" in data:
+            updated_data["email"] = data["email"]
+        if "password" in data:
+            hashed_password = bcrypt.generate_password_hash(data["password"]).decode("utf-8")
+            updated_data["password"] = hashed_password
+        if not updated_data:
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "Bad Request: No valid fields to update",
+                    "notify": True,
+                }
+            ), 400
+
+        update_result = users.find_one_and_update(
+            {"_id": ObjectId(data["_id"])},
+            {"$set": updated_data},
+            return_document=True
+        )
+
+        if not update_result:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Not Found: User not found",
+                    "notify": True,
+                }
+            ), 404
+
+        userObject = {
+            "id": str(update_result["_id"]),
+            "userName": update_result.get("userName", ""),
+            "email": update_result["email"],
+            "role": update_result.get("role", ""),
+            "verify_isActive": update_result.get("verify_isActive", True),
+        }
+
+        return (
+            jsonify(
+                {
+                    "code": 200,
+                    "data": {"userObject": userObject},
+                    "message": "OK: User updated successfully",
+                    "notify": True,
+                }
+            ),
+            200,
+        )
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify(
+            {
+                "code": 500,
+                "message": "Internal Server Error: An unexpected error occurred",
+                "notify": True,
+            }
+        ), 500

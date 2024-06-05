@@ -14,9 +14,9 @@ import {
   LogoutRounded as LogoutRoundedIcon
 } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 //actions
-import { setUser,setUpload } from "../../features/authSlice"
+import { setUser, setUpload } from "../../features/authSlice"
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -59,13 +59,17 @@ const StyledMenu = styled((props) => (
 
 export default function AdminMenu({
   name = "Admin",
-  role = "Admin",
-  avatarSrc = "https://placehold.co/300?text=A"
+  role = "Admin"
 }) {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { user } = useSelector(({ auth }) => auth);
+
+  const userName = user?.userObject?.userName || "";
+  const userInitial = userName.charAt(0).toUpperCase();
+  const avatarSrc = `https://placehold.co/300?text=${userInitial}`;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -105,7 +109,7 @@ export default function AdminMenu({
         <Box sx={{ display: "flex", gap: "0.7rem", alignItems: "center" }}>
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
             <Typography sx={{ fontSize: "13px", color: "#fff" }}>
-              Asad
+              {userName}
             </Typography>
           </Box>
           <Box>
@@ -129,7 +133,7 @@ export default function AdminMenu({
         open={open}
         onClose={handleClose}
       >
-        <MenuItem  onClick={handleProfile} sx={{ background: "#3b90b2", borderRadius: "10px", m: 2 }} disableRipple>
+        <MenuItem onClick={handleProfile} sx={{ background: "#3b90b2", borderRadius: "10px", m: 2 }} disableRipple>
           <EditIcon />
           Edit Profile
         </MenuItem>
