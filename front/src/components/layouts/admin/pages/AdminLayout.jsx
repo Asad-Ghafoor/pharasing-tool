@@ -48,6 +48,8 @@ function AdminLayout({ children, navLinks, user }) {
   const handleClick = () => {
     fileInputRef.current.click();
   };
+  
+  console.log(upload, 'asdfgg');
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

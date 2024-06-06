@@ -19,7 +19,7 @@ import { useFormik } from "formik";
 //APIs
 import { AuthAPI } from "../../../axios";
 //redux actions
-import { setUser , setLoading } from "../../../features/authSlice";
+import { setUser , setLoading, setUpload } from "../../../features/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -51,6 +51,7 @@ const Login = () => {
         if (res.code == 200) {
           localStorage.setItem("accessToken", res.data.token);
           dispatch(setUser(res.data));
+          dispatch(setUpload(true));
           dispatch(setLoading(false));
           setInProgress(false);
         } else {
