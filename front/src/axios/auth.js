@@ -51,6 +51,14 @@ class Routes {
     if (response && response.response?.data) return response.response.data;
     return response.data;
   }
+
+  async uploadFile(file) {
+    console.log(file, 'asfmdnndndndnnd');
+    const response = await axios.post("/upload_pdf", file);
+    if (response && response.response?.data) return response.response.data;
+    return response.data;
+  }
+
 }
 
 export default new Routes();

@@ -6,6 +6,7 @@ from src.utils import app, bcrypt, users,SMTP_SERVER,SMTP_PORT,SMTP_USERNAME,SMT
 from bson.objectid import ObjectId
 import smtplib
 import random
+import requests
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -406,3 +407,54 @@ def update_user():
                 "notify": True,
             }
         ), 500
+    
+
+
+@app.route("/upload_pdf", methods=["POST"]) 
+def upload_pdf():
+    try:
+        print(request.files)
+        # Ensure a file is provided in the request
+        if 'file' not in request.files:
+            return jsonify({
+                "code": 400,
+                "message": "Bad Request: No file provided",
+                "notify": True
+            }), 400
+
+        file = request.files['file']
+        
+        # Check if the file is a PDF
+        if file.content_type != 'application/pdf':
+            return jsonify({
+                "code": 400,
+                "message": "Bad Request: Only PDF files are allowed",
+                "notify": True
+            }), 400
+
+        # Forward the file to the specified route
+        upload_url = "http://722c-119-155-11-135.ngrok-free.app/upload"
+        response = requests.post(upload_url, files={"file": file})
+        print(response)
+
+        # Check response from the forwarding request
+        if response.status_code == 200:
+            return jsonify({
+                "code": 200,
+                "message": "File uploaded successfully",
+                "notify": True
+            }), 200
+        else:
+            return jsonify({
+                "code": response.status_code,
+                "message": f"Failed to upload file: {response.content.decode()}",
+                "notify": True
+            }), response.status_code
+
+    except Exception as error:
+        print(f"upload_pdf: {error}")
+        return jsonify({
+            "code": 500,
+            "message": f"Internal Server Error: {str(error)}",
+            "notify": True
+        }), 500

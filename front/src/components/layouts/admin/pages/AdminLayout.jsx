@@ -21,6 +21,7 @@ import AdminSidebar from "../components/AdminSidebar";
 import AdminHeader from "../components/AdminHeader";
 // hooks
 import useWindowResize from "../../../../hooks/useWindowResize";
+import { AuthAPI } from "../../../../axios";
 
 export const drawerWidth = 190;
 export const HistryDrawerWidth = 190;
@@ -35,6 +36,7 @@ function AdminLayout({ children, navLinks, user }) {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [open, setOpen] = useState(true);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -48,34 +50,44 @@ function AdminLayout({ children, navLinks, user }) {
   const handleClick = () => {
     fileInputRef.current.click();
   };
-  
+
   console.log(upload, 'asdfgg');
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file && file.type === 'application/pdf') {
+    if (file) {
       console.log('Selected file:', file);
-      // Handle the selected PDF file
+      setSelectedFile(file); 
     } else {
       console.error('Please select a PDF file');
     }
   };
 
   const handleUploadClick = () => {
-    // Implement your API call here
-    console.log('API hit triggered');
-    // Example API call using fetch
-    fetch('/api/upload', {
-      method: 'POST',
-      // Add your request body and headers here
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('API response:', data);
+    if (!selectedFile) {
+      console.error('No file selected');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    AuthAPI.uploadFile(formData)
+      .then((res) => {
+        console.log(res, '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\');
+        if (res.code === 200) {
+          console.log(res, '/////////////////kkk////');
+        }
       })
-      .catch(error => {
-        console.error('API error:', error);
+      .catch((err) => {
+        console.log(err);
       });
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && selectedFile) {
+      handleUploadClick();
+    }
   };
 
   return (
@@ -182,6 +194,7 @@ function AdminLayout({ children, navLinks, user }) {
                   borderRadius: '50px',
                 },
               }}
+              onKeyPress={handleKeyPress}
             />
           )}
         </Container>
