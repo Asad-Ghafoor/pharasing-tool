@@ -21,7 +21,7 @@ import AdminSidebar from "../components/AdminSidebar";
 import AdminHeader from "../components/AdminHeader";
 // hooks
 import useWindowResize from "../../../../hooks/useWindowResize";
-import { AuthAPI } from "../../../../axios";
+import axios from "axios";
 
 export const drawerWidth = 190;
 export const HistryDrawerWidth = 190;
@@ -57,32 +57,28 @@ function AdminLayout({ children, navLinks, user }) {
     const file = event.target.files[0];
     if (file) {
       console.log('Selected file:', file);
-      setSelectedFile(file); 
+      setSelectedFile(file);
     } else {
       console.error('Please select a PDF file');
     }
   };
 
-  const handleUploadClick = () => {
+  const handleUploadClick = async() => {
     if (!selectedFile) {
       console.error('No file selected');
       return;
     }
-
+  
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    AuthAPI.uploadFile(formData)
-      .then((res) => {
-        console.log(res, '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\');
-        if (res.code === 200) {
-          console.log(res, '/////////////////kkk////');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const response = await axios.post("http://127.0.0.1:5000/upload_pdf", formData)
+    if (response.code == 200) {
+      
+    }
+
   };
+  
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && selectedFile) {

@@ -204,7 +204,7 @@ def verification_code():
             return jsonify(
                 {
                     "code": 400,
-                    "message": "Bad Request: Verification code is missing",
+                    "message": "Verification code is missing",
                     "notify": True,
                 }
             ), 400
@@ -333,7 +333,7 @@ def update_user():
             return jsonify(
                 {
                     "code": 400,
-                    "message": "Bad Request: No data provided",
+                    "message": "No data provided",
                     "notify": True,
                 }
             ), 400
@@ -413,12 +413,11 @@ def update_user():
 @app.route("/upload_pdf", methods=["POST"]) 
 def upload_pdf():
     try:
-        print(request.files)
         # Ensure a file is provided in the request
         if 'file' not in request.files:
             return jsonify({
                 "code": 400,
-                "message": "Bad Request: No file provided",
+                "message": "No file provided",
                 "notify": True
             }), 400
 
@@ -428,15 +427,14 @@ def upload_pdf():
         if file.content_type != 'application/pdf':
             return jsonify({
                 "code": 400,
-                "message": "Bad Request: Only PDF files are allowed",
+                "message": "Only PDF files are allowed",
                 "notify": True
             }), 400
-
+        print('hit backend')
         # Forward the file to the specified route
-        upload_url = "http://722c-119-155-11-135.ngrok-free.app/upload"
-        response = requests.post(upload_url, files={"file": file})
-        print(response)
-
+        upload_url = "https://findoc.abark.tech/upload"
+        response = requests.post(upload_url, files={"file": (file.filename, file.read(), file.content_type)})
+        
         # Check response from the forwarding request
         if response.status_code == 200:
             return jsonify({
