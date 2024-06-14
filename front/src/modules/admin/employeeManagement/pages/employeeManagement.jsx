@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Container, FormControlLabel, Checkbox, Grid, Typography } from '@mui/material';
+import { Container, Grid, Typography, Checkbox, FormControlLabel, Icon } from '@mui/material';
 import { styled } from '@mui/system';
+import { useDispatch, useSelector } from 'react-redux';
+import { setModalResponse } from '../../../../features/authSlice';
+import CloseIcon from '@mui/icons-material/Close';
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => ({
   ...(checked && {
@@ -13,6 +16,9 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => 
 }));
 
 const EmployeeManagement = () => {
+  const dispatch = useDispatch();
+  const { modalResponse } = useSelector(({ auth }) => auth);
+
   const titles = [
     'ifrs-2-share-based-payment',
     'ifrs-3-business-combinations',
@@ -48,7 +54,15 @@ const EmployeeManagement = () => {
     'ifrs-15-revenue-from-contracts-with-customers'
   ];
 
-  const [checkedItems, setCheckedItems] = useState({});
+
+  const [checkedItems, setCheckedItems] = useState(() => {
+    // Initialize checkedItems with the modalResponse data
+    const initialCheckedItems = {};
+    titles.forEach(title => {
+      initialCheckedItems[title] = modalResponse?.summary_report[title];
+    });
+    return initialCheckedItems;
+  });
 
   const handleChange = (event) => {
     setCheckedItems({ ...checkedItems, [event.target.name]: event.target.checked });
@@ -64,14 +78,17 @@ const EmployeeManagement = () => {
           <Grid item xs={12} sm={6} key={index}>
             <StyledFormControlLabel
               control={
-                <Checkbox
-                  checked={checkedItems[title] || false}
-                  onChange={handleChange}
-                  name={title}
-                />
+                checkedItems[title] ? (
+                  <Checkbox
+                    checked={checkedItems[title]}
+                    onChange={handleChange}
+                    name={title}
+                  />
+                ) : (
+                  <CloseIcon style={{ color: 'red' }} />
+                )
               }
               label={title}
-              checked={checkedItems[title] || false}
             />
           </Grid>
         ))}

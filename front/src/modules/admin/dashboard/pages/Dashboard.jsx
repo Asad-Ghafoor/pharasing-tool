@@ -7,9 +7,9 @@ import InfoIcon from '@mui/icons-material/Info';
 
 const Dashboard = () => {
   const cards = [
-    { icon: <LightbulbIcon sx={{ fontSize: 40, color: '#FFC107' }} />, text: 'Design a fun coding game' },
-    { icon: <FitnessCenterIcon sx={{ fontSize: 40, color: '#F50057' }} />, text: 'Create a workout plan' },
-    { icon: <SpaIcon sx={{ fontSize: 40, color: '#4CAF50' }} />, text: 'Plan a relaxing day' }
+    { icon: <LightbulbIcon sx={{ fontSize: 40, color: '#FFC107' }} />, text: 'Rules Matching' },
+    { icon: <FitnessCenterIcon sx={{ fontSize: 40, color: '#F50057' }} />, text: 'Processing Documents' },
+    { icon: <SpaIcon sx={{ fontSize: 40, color: '#4CAF50' }} />, text: 'Results of Docments' }
   ];
 
   return (

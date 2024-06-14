@@ -13,6 +13,7 @@ import {
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +23,7 @@ import AdminHeader from "../components/AdminHeader";
 // hooks
 import useWindowResize from "../../../../hooks/useWindowResize";
 import axios from "axios";
+import { setModalResponse } from "../../../../features/authSlice";
 
 export const drawerWidth = 190;
 export const HistryDrawerWidth = 190;
@@ -37,6 +39,7 @@ function AdminLayout({ children, navLinks, user }) {
 
   const [open, setOpen] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [dataLoading, setDataLoading] = useState(false);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -70,12 +73,17 @@ function AdminLayout({ children, navLinks, user }) {
     formData.append('file', selectedFile);
 
     try {
+      setDataLoading(true);
       const response = await axios.post("http://127.0.0.1:5000/upload_pdf", formData);
       if (response.status === 200) {
-       console.log(response,'asdfghjklcvbnm,fghjklghm,');
+        dispatch(setModalResponse(response?.data?.summary_report));
+        setDataLoading(false);
+        setSelectedFile(null)
+        navigate('/user/result')
       }
     } catch (error) {
       console.error('File upload failed', error);
+      setDataLoading(false);
     }
   };
 
@@ -115,7 +123,7 @@ function AdminLayout({ children, navLinks, user }) {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              height: '78vh',
+              height:'calc(100vh - 120px)',
               flexDirection: isSmallScreen ? 'column' : 'row',
               overflow: 'hidden',
             }}
@@ -146,16 +154,24 @@ function AdminLayout({ children, navLinks, user }) {
                   readOnly: true,
                   startAdornment: (
                     <InputAdornment position="start">
-                      <IconButton
-                        onClick={handleClick}
-                        sx={{
-                          '& .MuiSvgIcon-root': {
-                            transform: 'rotate(90deg)',
-                          },
-                        }}
-                      >
-                        <AttachmentIcon />
-                      </IconButton>
+                      {!dataLoading ? (
+
+                        <IconButton
+                          onClick={handleClick}
+                          sx={{
+                            '& .MuiSvgIcon-root': {
+                              transform: 'rotate(90deg)',
+                            },
+                          }}
+                        >
+                          <AttachmentIcon />
+                        </IconButton>
+                      ) : (
+                        <Box sx={{ display: 'flex' }}>
+                          <CircularProgress  size={30}/>
+                        </Box>
+
+                      )}
                       {selectedFile && (
                         <Box
                           sx={{
@@ -189,7 +205,14 @@ function AdminLayout({ children, navLinks, user }) {
                           },
                         }}
                       >
-                        <ArrowUpwardIcon />
+                        {!dataLoading ? (
+                          <ArrowUpwardIcon />
+                        ) : (
+                          <Box sx={{ display: 'flex' }}>
+                            <CircularProgress  size={30}/>
+                          </Box>
+
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
