@@ -23,7 +23,7 @@ import AdminHeader from "../components/AdminHeader";
 import useWindowResize from "../../../../hooks/useWindowResize";
 import axios from "axios";
 
-export const drawerWidth = 190;
+export const drawerWidth = 220;
 export const HistryDrawerWidth = 190;
 
 function AdminLayout({ children, navLinks, user }) {
