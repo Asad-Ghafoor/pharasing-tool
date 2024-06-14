@@ -1,5 +1,3 @@
-// File: src/components/layouts/admin/pages/AdminLayout.js
-
 import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
@@ -14,6 +12,8 @@ import {
 } from "@mui/material";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // components
@@ -51,34 +51,33 @@ function AdminLayout({ children, navLinks, user }) {
     fileInputRef.current.click();
   };
 
-  console.log(upload, 'asdfgg');
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log('Selected file:', file);
       setSelectedFile(file);
     } else {
       console.error('Please select a PDF file');
     }
   };
 
-  const handleUploadClick = async() => {
+  const handleUploadClick = async () => {
     if (!selectedFile) {
       console.error('No file selected');
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    const response = await axios.post("http://127.0.0.1:5000/upload_pdf", formData)
-    if (response.code == 200) {
-      
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/upload_pdf", formData);
+      if (response.status === 200) {
+        console.log('File uploaded successfully');
+      }
+    } catch (error) {
+      console.error('File upload failed', error);
     }
-
   };
-  
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && selectedFile) {
@@ -138,60 +137,76 @@ function AdminLayout({ children, navLinks, user }) {
           </Box>
 
           {upload && (
-            <TextField
-              variant="outlined"
-              placeholder="Upload PDF file"
-              fullWidth
-              InputProps={{
-                readOnly: true,
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      onClick={handleClick}
-                      sx={{
-                        '& .MuiSvgIcon-root': {
-                          transform: 'rotate(90deg)',
-                        },
-                      }}
-                    >
-                      <AttachmentIcon />
-                    </IconButton>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="application/pdf"
-                      style={{ display: 'none' }}
-                      onChange={handleFileChange}
-                    />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleUploadClick}
-                      sx={{
-                        background: "#D7D7D7",
-                        '&:hover': {
+            <>
+              <TextField
+                variant="outlined"
+                placeholder={!selectedFile ? "Upload PDF file" : ""}
+                fullWidth
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        onClick={handleClick}
+                        sx={{
+                          '& .MuiSvgIcon-root': {
+                            transform: 'rotate(90deg)',
+                          },
+                        }}
+                      >
+                        <AttachmentIcon />
+                      </IconButton>
+                      {selectedFile && (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            borderRadius: '10px',
+                            padding: '15px'
+                          }}
+                        >
+                          <PictureAsPdfIcon sx={{ marginRight: '10px', color: '#FF0000' }} />
+                          {selectedFile.name}
+                        </Box>
+                      )}
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="application/pdf"
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                      />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleUploadClick}
+                        sx={{
                           background: "#D7D7D7",
-                        },
-                      }}
-                    >
-                      <ArrowUpwardIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                sx: {
-                  borderRadius: '50px',
-                  backgroundColor: '#f5f5f5',
-                },
-              }}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '50px',
-                },
-              }}
-              onKeyPress={handleKeyPress}
-            />
+                          '&:hover': {
+                            background: "#D7D7D7",
+                          },
+                        }}
+                      >
+                        <ArrowUpwardIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  sx: {
+                    borderRadius: '50px',
+                    backgroundColor: '#f5f5f5',
+                  },
+                }}
+                sx={{
+                  height: "auto",
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '50px',
+                  },
+                }}
+                onKeyPress={handleKeyPress}
+              />
+            </>
           )}
         </Container>
       </Box>

@@ -17,8 +17,7 @@ import { Logo } from "../../../../assets/image/index";
 import Divider from "@mui/material/Divider";
 import { useDispatch } from 'react-redux';
 import { setUpload } from "../../../../features/authSlice";
-import { Checkbox } from "@mui/material";
-
+import CreateIcon from '@mui/icons-material/Create';
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -57,11 +56,11 @@ function AdminSidebar({ open, navLinks }) {
 
   const handleNavigate = (path) => {
     dispatch(setUpload(true));
-    if (path) navigate(`/user${path}`);
+    if (path) navigate(`/`);
   };
 
   const getTabActive = (tab) => {
-    if (pathname.includes(`/user${tab}`)) {
+    if (pathname.includes(`/`)) {
       return true;
     }
     return false;
@@ -143,24 +142,21 @@ function AdminSidebar({ open, navLinks }) {
                       minWidth: "max-content",
                     }}
                   >
-                    <Checkbox
-                      sx={{
-                        width: "24px",
-                        height: "24px",
-                        color: "black",
-                      }}
-                    />
                   </ListItemIcon>
                   <ListItemText>
                     <Box
                       component="span"
                       sx={{
+                        display: 'flex',
+                        alignItems: 'center',
                         color: "#fff",
                         fontWeight: 600,
                       }}
                     >
-                      {tab.title}
+                      New Chat
+                      <CreateIcon sx={{ marginLeft: 2 }} />
                     </Box>
+
                   </ListItemText>
                 </ListItemButton>
               )}
