@@ -7,7 +7,8 @@ export const authSlice = createSlice({
     user: null,
     refetch: false,
     state: true,
-    upload: true
+    upload: true,
+    modalResponse: ""
   },
   reducers: {
     setLoading: (state, action) => {
@@ -22,6 +23,9 @@ export const authSlice = createSlice({
     },
     setUpload: (state, action) => {
       state.upload = action.payload;
+    },
+    setModalResponse: (state, action) => {
+      state.modalResponse = action.payload;
     }
 
   },
@@ -29,6 +33,6 @@ export const authSlice = createSlice({
 
 const { actions, reducer } = authSlice;
 
-export const { setLoading, setUser, setRefetch, setUpload } = actions;
+export const { setLoading, setUser, setRefetch, setUpload, setModalResponse } = actions;
 
 export default reducer;

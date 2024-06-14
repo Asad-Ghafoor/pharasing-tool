@@ -23,7 +23,7 @@ import AdminHeader from "../components/AdminHeader";
 import useWindowResize from "../../../../hooks/useWindowResize";
 import axios from "axios";
 
-export const drawerWidth = 220;
+export const drawerWidth = 190;
 export const HistryDrawerWidth = 190;
 
 function AdminLayout({ children, navLinks, user }) {
@@ -72,7 +72,7 @@ function AdminLayout({ children, navLinks, user }) {
     try {
       const response = await axios.post("http://127.0.0.1:5000/upload_pdf", formData);
       if (response.status === 200) {
-        console.log('File uploaded successfully');
+       console.log(response,'asdfghjklcvbnm,fghjklghm,');
       }
     } catch (error) {
       console.error('File upload failed', error);

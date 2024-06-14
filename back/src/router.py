@@ -434,14 +434,24 @@ def upload_pdf():
         # Forward the file to the specified route
         upload_url = "https://findoc.abark.tech/upload"
         response = requests.post(upload_url, files={"file": (file.filename, file.read(), file.content_type)})
+        print(response.json(), '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\sdk\\\\\\\\\\\\\\\\\\\\')
         
         # Check response from the forwarding request
         if response.status_code == 200:
-            return jsonify({
-                "code": 200,
-                "message": "File uploaded successfully",
-                "notify": True
-            }), 200
+            try:
+                json_response = response.json()  # Parse JSON response from the backend
+                return jsonify({
+                    "code": 200,
+                    "message": "File uploaded successfully",
+                    "notify": True,
+                    "summary_report": json_response  # Include the parsed JSON response
+                }), 200
+            except ValueError:  # If the response isn't JSON, return an error message
+                return jsonify({
+                    "code": 200,
+                    "message": "File uploaded successfully but response is not JSON",
+                    "notify": True
+                }), 200
         else:
             return jsonify({
                 "code": response.status_code,
