@@ -74,7 +74,7 @@ function AdminLayout({ children, navLinks, user }) {
 
     try {
       setDataLoading(true);
-      const response = await axios.post("http://127.0.0.1:5000/upload_pdf", formData);
+      const response = await axios.post("https://api.findoc.py.abark.com.pk/upload_pdf", formData);
       if (response.status === 200) {
         dispatch(setModalResponse(response?.data?.summary_report));
         setDataLoading(false);
@@ -123,7 +123,7 @@ function AdminLayout({ children, navLinks, user }) {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              height:'calc(100vh - 120px)',
+              height:'calc(100vh - 129px)',
               flexDirection: isSmallScreen ? 'column' : 'row',
               overflow: 'hidden',
             }}
