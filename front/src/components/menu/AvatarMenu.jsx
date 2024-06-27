@@ -90,6 +90,11 @@ export default function AdminMenu({
     navigate("/user/profile")
     setAnchorEl(null)
   };
+  const handlePrompt = () => {
+    dispatch(setUpload(false));
+    navigate("/user/prompt")
+    setAnchorEl(null)
+  };
 
   return (
     <div>
@@ -133,6 +138,10 @@ export default function AdminMenu({
         open={open}
         onClose={handleClose}
       >
+        <MenuItem onClick={handlePrompt} sx={{ background: "#3b90b2", borderRadius: "10px", m: 2 }} disableRipple>
+          <EditIcon />
+          Edit Prompt
+        </MenuItem>
         <MenuItem onClick={handleProfile} sx={{ background: "#3b90b2", borderRadius: "10px", m: 2 }} disableRipple>
           <EditIcon />
           Edit Profile

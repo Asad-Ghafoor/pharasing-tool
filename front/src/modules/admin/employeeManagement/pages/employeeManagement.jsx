@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Grid, Typography, Checkbox, FormControlLabel, Icon, Modal, Box } from '@mui/material';
+import { Container, Grid, Typography, Checkbox, FormControlLabel, Icon, Modal, Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { setModalResponse } from '../../../../features/authSlice';
@@ -7,6 +7,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import axios from 'axios'
+import { saveAs } from 'file-saver';
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => ({
   ...(checked && {
@@ -23,7 +25,7 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme, checked }) => 
 const EmployeeManagement = () => {
   const dispatch = useDispatch();
   const { modalResponse } = useSelector(({ auth }) => auth);
- 
+
   const titles = [
     'ifrs 2 share based payment',
     'ifrs 3 business combinations',
@@ -87,13 +89,31 @@ const EmployeeManagement = () => {
     setOpen(false);
   };
 
+  const downloadReport = async () => {
+    try {
+      const response = await axios.get('https://findoc.abark.tech/download_report', {
+        responseType: 'blob', // Important
+      });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      saveAs(blob, 'report.pdf');
+      console.log(response, 'response');
+    } catch (error) {
+      console.error('Error downloading the report', error);
+    }
+  }
+
   console.log(modalResponse.detailed_report);
 
   return (
     <Container style={{ padding: '20px' }}>
-      <Typography variant="h4" gutterBottom>
-        Results
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h4">
+          Results
+        </Typography>
+        <Button variant="contained" sx={{ alignSelf: 'flex-end' }} onClick={downloadReport}>
+          Download Report
+        </Button>
+      </Box>
       <Grid container spacing={2}>
         {titles.map((title, index) => (
           <Grid item xs={12} sm={6} key={index}>
@@ -101,10 +121,10 @@ const EmployeeManagement = () => {
               control={
                 checkedItems[title] ? (
                   <>
-                  <CheckCircleIcon 
-                  sx={{color: "#3B90B2"}}
-                  />
-                  {/* {{title}} */}
+                    <CheckCircleIcon
+                      sx={{ color: "#3B90B2" }}
+                    />
+                    {/* {{title}} */}
                   </>
                 ) : (
                   <CloseIcon style={{ color: 'red' }} />
@@ -112,7 +132,7 @@ const EmployeeManagement = () => {
               }
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <VisibilityIcon 
+                  <VisibilityIcon
                     style={{ cursor: 'pointer', marginRight: '8px' }}
                     onClick={() => handleOpen((modalResponse.detailed_report[`${title}`].reason))}
                   />
@@ -146,7 +166,7 @@ const EmployeeManagement = () => {
           <Typography id="modal-title" variant="h6" component="h2">
             Reasoning
           </Typography>
-          <Typography id="modal-description" sx={{ mt: 2, overflow: "auto",  maxHeight: '400px', } }>
+          <Typography id="modal-description" sx={{ mt: 2, overflow: "auto", maxHeight: '400px', }}>
             {currentReasoning}
           </Typography>
         </Box>

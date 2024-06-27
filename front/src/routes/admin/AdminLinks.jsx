@@ -6,12 +6,14 @@ import GridViewIcon from '@mui/icons-material/GridView';
 const Dashboard = lazy(() => import("../../modules/admin/dashboard/pages/Dashboard"));
 const Profile = lazy(() => import("../../modules/admin/profile/pages/Profile"));
 const Result = lazy(() => import("../../modules/admin/employeeManagement/pages/employeeManagement"));
+const Prompt = lazy(() => import("../../modules/admin/Prompt/page/Prompt"));
 
 
 export const AdminRoutes = [
   <Route path="add-new-chat" element={<Dashboard />} />,
   <Route path="profile" element={<Profile />} />,
   <Route path="result" element={<Result />} />,
+  <Route path="prompt" element={<Prompt />} />,
   <Route path="/*" element={<Navigate replace to="/user/add-new-chat" />} />,
 ];
 
