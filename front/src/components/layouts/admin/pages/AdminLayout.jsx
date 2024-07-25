@@ -76,6 +76,7 @@ function AdminLayout({ children, navLinks, user }) {
       setDataLoading(true);
       const response = await axios.post("https://api.findoc.py.abark.com.pk/upload_pdf", formData);
       if (response.status === 200) {
+        console.log(response, 'layout');
         dispatch(setModalResponse(response?.data?.summary_report));
         setDataLoading(false);
         setSelectedFile(null)

@@ -26,6 +26,8 @@ const EmployeeManagement = () => {
   const dispatch = useDispatch();
   const { modalResponse } = useSelector(({ auth }) => auth);
 
+  console.log(modalResponse, 'modalResponse');
+
   const titles = [
     'ifrs 2 share based payment',
     'ifrs 3 business combinations',
@@ -89,14 +91,20 @@ const EmployeeManagement = () => {
     setOpen(false);
   };
 
+
   const downloadReport = async () => {
     try {
-      const response = await axios.get('https://findoc.abark.tech/download_report', {
-        responseType: 'blob', // Important
-      });
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-      saveAs(blob, 'report.pdf');
-      console.log(response, 'response');
+      const fileId = modalResponse['ID Filename']
+      if(fileId){
+        const response = await axios.get(`https://findoc.abark.tech/download_report/?id=${fileId}`, {
+          responseType: 'blob', 
+        }); 
+        console.log(response, 'api log');
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        saveAs(blob, modalResponse['ID Filename']);
+        console.log(response, 'response');
+      }
+    
     } catch (error) {
       console.error('Error downloading the report', error);
     }
