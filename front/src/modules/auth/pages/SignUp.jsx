@@ -8,24 +8,26 @@ import {
     Button,
     CircularProgress
 } from "@mui/material";
-import { VisibilityOutlined, VisibilityOffOutlined } from "@mui/icons-material";
+import { VisibilityOutlined, VisibilityOffOutlined, Opacity } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-//components
+// components
 import InputField from "../../../components/InputField/InputField";
-//formik and validations
+// formik and validations
 import * as yup from "yup";
 import { useFormik } from "formik";
-//APIs
+// APIs
 import { AuthAPI } from "../../../axios";
+// country and region selectors
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
 const SignUp = () => {
     const navigate = useNavigate();
-
+    
     const [passVisible, setPassVisible] = useState(false);
     const [InProgress, setInProgress] = useState(false);
 
     // initial values
-    const initialValues = { email: "", password: "" , userName: "",role :"user" };
+    const initialValues = { email: "", password: "", userName: "", role: "user", country: "", region: "" };
 
     // validation schema
     const validationSchema = yup.object().shape({
@@ -35,17 +37,20 @@ const SignUp = () => {
             .required("Email is required"),
         password: yup.string().required("Password is required"),
         userName: yup.string().required("User Name is required"),
+        country: yup.string().required("Country is required"),
+        region: yup.string().required("Region is required"),
     });
 
     // Handle form submission
     const onSubmit = (values) => {
+        console.log(values);
+        
         setInProgress(true);
         AuthAPI.register(JSON.stringify(values))
             .then((res) => {
                 setInProgress(false);
-                if (res.code == 200) {
-                   navigate('auth/login')
-                    setInProgress(false);
+                if (res.code === 200) {
+                    navigate('auth/login');
                 } else {
                     setInProgress(false);
                 }
@@ -55,9 +60,11 @@ const SignUp = () => {
                 setInProgress(false);
             });
     };
+
     const formik = useFormik({ initialValues, validationSchema, onSubmit });
+
     return (
-        <Grid container sx={{ height: "100%", }}>
+        <Grid container sx={{ height: "100%" }}>
             <Grid
                 item
                 md={12}
@@ -130,7 +137,7 @@ const SignUp = () => {
                             <Box sx={{ paddingBottom: "1rem" }}>
                                 <InputField
                                     label="User Name"
-                                    placeholder="your user Name"
+                                    placeholder="Your user name"
                                     name="userName"
                                     value={formik.values.userName}
                                     onChange={formik.handleChange}
@@ -157,6 +164,50 @@ const SignUp = () => {
                                     }
                                 />
                             </Box>
+                            {/* ======= Country Input ======= */}
+                            <Box sx={{ paddingBottom: "1rem" }}>
+                                <Typography
+                                    sx={{ color: "primary.black", fontSize: "14px", mb: 1 ,fontWeight:500}}
+                                >
+                                    Country
+                                </Typography>
+                                <CountryDropdown
+                                    value={formik.values.country}
+                                    onChange={(val) => {
+                                        formik.setFieldValue("country", val);
+                                        formik.setFieldValue("region", "");
+                                    }}
+                                    style={{ width: "100%", padding: "14px", fontSize: "14px", opacity: '0.6', borderRadius: '13px' }}
+                                    classes="input-class"
+                                />
+                                {formik.touched.country && formik.errors.country && (
+                                    <Typography color="error">
+                                        {formik.errors.country}
+                                    </Typography>
+                                )}
+                            </Box>
+                            {/* ======= Region Input ======= */}
+                            {formik.values.country && (
+                                <Box sx={{ paddingBottom: "1rem" }}>
+                                    <Typography
+                                        sx={{ color: "primary.black", fontSize: "14px", mb: 1, fontWeight:500 }}
+                                    >
+                                        Region
+                                    </Typography>
+                                    <RegionDropdown
+                                        country={formik.values.country}
+                                        value={formik.values.region}
+                                        onChange={(val) => formik.setFieldValue("region", val)}
+                                        style={{ width: "100%", padding: "14px", fontSize: "14px", opacity: '0.6', borderRadius: '13px'  }}
+                                        classes="input-class"
+                                    />
+                                    {formik.touched.region && formik.errors.region && (
+                                        <Typography color="error">
+                                            {formik.errors.region}
+                                        </Typography>
+                                    )}
+                                </Box>
+                            )}
                             {/* ======= Password Input ======= */}
                             <Box sx={{ paddingBottom: "1rem" }}>
                                 <InputField
@@ -204,7 +255,7 @@ const SignUp = () => {
                                         },
                                     }}
                                 >
-                                    {"already have an account ?"}
+                                    {"Already have an account?"}
                                 </Typography>
                                 <Typography
                                     onClick={() => navigate("/auth/login")}
@@ -232,7 +283,7 @@ const SignUp = () => {
                                 {InProgress ? (
                                     <CircularProgress size={30} sx={{ color: "white" }} />
                                 ) : (
-                                    "Sign UP"
+                                    "Sign Up"
                                 )}
                             </Button>
                         </form>
@@ -240,7 +291,7 @@ const SignUp = () => {
                 </Container>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
-export default SignUp
+export default SignUp;

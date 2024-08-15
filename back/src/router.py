@@ -18,13 +18,15 @@ def register():
         or not data.get("email")
         or not data.get("password")
         or not data.get("role")
+        or not data.get("country")
+        or not data.get("region")
     ):
-      return (
+        return (
             jsonify(
                 {
                     "code": 400,
                     "data":"",
-                    "message":"Name, email, Role and password are required",
+                    "message":"Name, email, password, role, country, and region are required",
                     "notify": True,
                 }
             ),
@@ -51,6 +53,8 @@ def register():
             "email": data["email"],
             "password": hashed_password,
             "role": data["role"],
+            "country": data["country"],
+            "region": data["region"],
         }
     ).inserted_id
 
